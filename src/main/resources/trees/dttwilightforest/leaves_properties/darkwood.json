@@ -1,4 +1,7 @@
 {
-  "primitive_leaves": "twilightforest:darkwood_leaves",
-  "cell_kit": "dynamictrees:dark_oak"
+  "primitive_leaves": "twilightforest:dark_leaves",
+  "cell_kit": "dynamictrees:dark_oak",
+  "leaves_texture": "twilightforest:block/darkwood_leaves",
+  "smother": 6,
+  "light_requirement": 4
 }

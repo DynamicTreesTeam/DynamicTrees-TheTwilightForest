@@ -1,9 +1,17 @@
 {
   "family": "dttwilightforest:darkwood",
-  "tapering": 0.2,
-  "signal_energy": 10.0,
-  "up_probability": 2,
-  "lowest_branch_height": 3,
+  "tapering": 0.4,
+  "signal_energy": 24.0,
+  "up_probability": 4,
+  "lowest_branch_height": 6,
+  "soil_longevity": 8,
+  "growth_logic_kit": {
+    "name": "dttwilightforest:canopy",
+    "properties": {
+      "height_variation": 2,
+      "canopy_height": 8
+    }
+  },
   "leaves_properties": "dttwilightforest:darkwood",
   "environment_factors" : {
 
@@ -12,11 +20,12 @@
   "primitive_sapling": "twilightforest:darkwood_sapling",
   "features" : [
     {
-      "name": "rot_soil",
+      "name": "clear_volume",
       "properties": {
-        "rotten_soil": "podzol"
+        "height": 3
       }
     },
-    "mushroom_rot"
+    "bottom_flare",
+    "roots"
   ]
 }

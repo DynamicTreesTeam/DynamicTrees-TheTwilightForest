@@ -1,8 +1,8 @@
 {
   "common_leaves": "dttwilightforest:darkwood",
   "common_species": "dttwilightforest:darkwood",
-  "primitive_log": "twilightforest:darkwood_log",
-  "primitive_stripped_log": "twilightforest:stripped_darkwood_log",
+  "primitive_log": "twilightforest:dark_log",
+  "primitive_stripped_log": "twilightforest:stripped_dark_log",
   "max_branch_radius": 24,
   "generate_surface_root": true
 }

@@ -1,9 +1,10 @@
 {
   "family": "dttwilightforest:canopy",
-  "tapering": 0.9,
-  "signal_energy": 24.0,
-  "up_probability": 10,
-  "lowest_branch_height": 12,
+  "tapering": 0.2,
+  "signal_energy": 30.0,
+  "up_probability": 8,
+  "lowest_branch_height": 16,
+  "soil_longevity": 12,
   "growth_logic_kit": "dttwilightforest:canopy",
   "leaves_properties": "dttwilightforest:canopy",
   "environment_factors" : {
