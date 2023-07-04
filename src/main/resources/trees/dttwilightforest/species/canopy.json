@@ -1,0 +1,23 @@
+{
+  "family": "dttwilightforest:canopy",
+  "tapering": 0.9,
+  "signal_energy": 24.0,
+  "up_probability": 10,
+  "lowest_branch_height": 12,
+  "growth_logic_kit": "dttwilightforest:canopy",
+  "leaves_properties": "dttwilightforest:canopy",
+  "environment_factors" : {
+
+  },
+  "perfect_biomes": { "types": [ "forest" ] },
+  "primitive_sapling": "twilightforest:canopy_sapling",
+  "features" : [
+    {
+      "name": "rot_soil",
+      "properties": {
+        "rotten_soil": "podzol"
+      }
+    },
+    "mushroom_rot"
+  ]
+}

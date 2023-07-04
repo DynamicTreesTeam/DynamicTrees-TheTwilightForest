@@ -1,0 +1,21 @@
+{
+  "family": "dttwilightforest:sorting",
+  "tapering": 2.0,
+  "signal_energy": 6.0,
+  "lowest_branch_height": 4,
+  "leaves_properties": "dttwilightforest:sorting",
+  "environment_factors" : {
+
+  },
+  "perfect_biomes": { "types": [ "forest" ] },
+  "primitive_sapling": "twilightforest:sorting_sapling",
+  "features" : [
+    {
+      "name": "rot_soil",
+      "properties": {
+        "rotten_soil": "podzol"
+      }
+    },
+    "mushroom_rot"
+  ]
+}

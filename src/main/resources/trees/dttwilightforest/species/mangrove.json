@@ -1,0 +1,22 @@
+{
+  "family": "dttwilightforest:mangrove",
+  "tapering": 0.2,
+  "signal_energy": 10.0,
+  "lowest_branch_height": 4,
+  "growth_rate": 0.6,
+  "leaves_properties": "dttwilightforest:mangrove",
+  "environment_factors" : {
+
+  },
+  "perfect_biomes": { "types": [ "forest" ] },
+  "primitive_sapling": "twilightforest:mangrove_sapling",
+  "features" : [
+    {
+      "name": "rot_soil",
+      "properties": {
+        "rotten_soil": "podzol"
+      }
+    },
+    "mushroom_rot"
+  ]
+}

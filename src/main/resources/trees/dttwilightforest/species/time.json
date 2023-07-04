@@ -1,0 +1,23 @@
+{
+  "family": "dttwilightforest:time",
+  "tapering": 0.8,
+  "lowest_branch_height": 4,
+  "growth_rate": 0.8,
+  "soil_longevity": 14,
+  "max_branch_radius": 24,
+  "leaves_properties": "dttwilightforest:time",
+  "environment_factors" : {
+
+  },
+  "perfect_biomes": { "types": [ "forest" ] },
+  "primitive_sapling": "twilightforest:time_sapling",
+  "features" : [
+    {
+      "name": "rot_soil",
+      "properties": {
+        "rotten_soil": "podzol"
+      }
+    },
+    "mushroom_rot"
+  ]
+}

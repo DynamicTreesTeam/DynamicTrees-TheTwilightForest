@@ -1,0 +1,15 @@
+{
+  "replace": false,
+  "values": [
+    "dttwilightforest:canopy_leaves",
+    "dttwilightforest:darkwood_leaves",
+    "dttwilightforest:mangrove_leaves",
+    "dttwilightforest:mining_leaves",
+    "dttwilightforest:rainbow_oak_leaves",
+    "dttwilightforest:robust_twilight_oak_leaves",
+    "dttwilightforest:sorting_leaves",
+    "dttwilightforest:time_leaves",
+    "dttwilightforest:transformation_leaves",
+    "dttwilightforest:twilight_oak_leaves"
+  ]
+}

@@ -1,0 +1,7 @@
+{
+  "common_leaves": "dttwilightforest:transformation",
+  "common_species": "dttwilightforest:transformation",
+  "primitive_log": "twilightforest:transformation_log",
+  "primitive_stripped_log": "twilightforest:stripped_transformation_log",
+  "max_branch_radius": 8
+}

@@ -1,0 +1,13 @@
+{
+  "replace": false,
+  "values": [
+    "dttwilightforest:canopy_branch",
+    "dttwilightforest:darkwood_branch",
+    "dttwilightforest:mangrove_branch",
+    "dttwilightforest:mining_branch",
+    "dttwilightforest:sorting_branch",
+    "dttwilightforest:time_branch",
+    "dttwilightforest:transformation_branch",
+    "dttwilightforest:twilight_oak_branch"
+  ]
+}

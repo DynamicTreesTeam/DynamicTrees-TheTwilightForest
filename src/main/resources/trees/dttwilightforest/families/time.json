@@ -1,0 +1,8 @@
+{
+  "common_leaves": "dttwilightforest:time",
+  "common_species": "dttwilightforest:time",
+  "primitive_log": "twilightforest:time_log",
+  "primitive_stripped_log": "twilightforest:stripped_time_log",
+  "max_branch_radius": 24,
+  "generate_surface_root": true
+}

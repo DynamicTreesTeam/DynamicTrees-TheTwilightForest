@@ -1,0 +1,7 @@
+{
+  "common_leaves": "dttwilightforest:sorting",
+  "common_species": "dttwilightforest:sorting",
+  "primitive_log": "twilightforest:sorting_log",
+  "primitive_stripped_log": "twilightforest:stripped_sorting_log",
+  "max_branch_radius": 8
+}

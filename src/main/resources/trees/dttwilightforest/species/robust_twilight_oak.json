@@ -1,0 +1,27 @@
+{
+  "family": "dttwilightforest:twilight_oak",
+  "tapering": 0.2,
+  "signal_energy": 40.0,
+  "lowest_branch_height": 25,
+  "growth_rate": 0.9,
+  "soil_longevity": 32,
+  "max_branch_radius": 24,
+  "leaves_properties": "dttwilightforest:robust_twilight_oak",
+  "world_gen_leaf_map_height": 64,
+  "environment_factors" : {
+
+  },
+  "perfect_biomes": { "types": [ "forest" ] },
+  "generate_seed": true,
+  "generate_sapling": true,
+  "primitive_sapling": "twilightforest:hollow_oak_sapling",
+  "features" : [
+    {
+      "name": "rot_soil",
+      "properties": {
+        "rotten_soil": "podzol"
+      }
+    },
+    "mushroom_rot"
+  ]
+}

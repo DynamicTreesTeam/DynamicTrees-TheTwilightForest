@@ -1,0 +1,20 @@
+{
+  "family": "dttwilightforest:mining",
+  "signal_energy": 16.0,
+  "lowest_branch_height": 8,
+  "leaves_properties": "dttwilightforest:mining",
+  "environment_factors" : {
+
+  },
+  "perfect_biomes": { "types": [ "forest" ] },
+  "primitive_sapling": "twilightforest:mining_sapling",
+  "features" : [
+    {
+      "name": "rot_soil",
+      "properties": {
+        "rotten_soil": "podzol"
+      }
+    },
+    "mushroom_rot"
+  ]
+}

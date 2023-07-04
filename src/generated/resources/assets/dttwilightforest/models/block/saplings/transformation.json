@@ -1,0 +1,8 @@
+{
+  "parent": "dynamictrees:block/smartmodel/sapling",
+  "textures": {
+    "particle": "twilightforest:block/transformation_leaves",
+    "log": "twilightforest:block/transformation_log",
+    "leaves": "twilightforest:block/transformation_leaves"
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "replace": false,
+  "values": [
+    "dttwilightforest:canopy_seed",
+    "dttwilightforest:darkwood_seed",
+    "dttwilightforest:mangrove_seed",
+    "dttwilightforest:mining_seed",
+    "dttwilightforest:rainbow_oak_seed",
+    "dttwilightforest:robust_twilight_oak_seed",
+    "dttwilightforest:sorting_seed",
+    "dttwilightforest:time_seed",
+    "dttwilightforest:transformation_seed",
+    "dttwilightforest:twilight_oak_seed"
+  ]
+}

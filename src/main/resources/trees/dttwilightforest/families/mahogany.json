@@ -1,8 +1,0 @@
-{
-  "common_leaves": "dthexerei:mahogany",
-  "common_species": "dthexerei:mahogany",
-  "primitive_log": "hexerei:mahogany_log",
-  "primitive_stripped_log": "hexerei:stripped_mahogany_log",
-  "max_branch_radius": 24,
-  "generate_surface_root": true
-}

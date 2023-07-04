@@ -1,0 +1,13 @@
+{
+  "replace": false,
+  "values": [
+    "dttwilightforest:stripped_canopy_branch",
+    "dttwilightforest:stripped_darkwood_branch",
+    "dttwilightforest:stripped_mangrove_branch",
+    "dttwilightforest:stripped_mining_branch",
+    "dttwilightforest:stripped_sorting_branch",
+    "dttwilightforest:stripped_time_branch",
+    "dttwilightforest:stripped_transformation_branch",
+    "dttwilightforest:stripped_twilight_oak_branch"
+  ]
+}

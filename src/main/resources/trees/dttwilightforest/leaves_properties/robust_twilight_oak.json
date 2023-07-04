@@ -1,0 +1,6 @@
+{
+  "primitive_leaves": "twilightforest:twilight_oak_leaves",
+  "leaves_texture": "minecraft:block/oak_leaves",
+  "smother": 12,
+  "light_requirement": 6
+}

@@ -1,0 +1,7 @@
+{
+  "common_leaves": "dttwilightforest:mining",
+  "common_species": "dttwilightforest:mining",
+  "primitive_log": "twilightforest:mining_log",
+  "primitive_stripped_log": "twilightforest:stripped_mining_log",
+  "max_branch_radius": 8
+}

@@ -1,0 +1,7 @@
+{
+  "parent": "dynamictrees:item/branch",
+  "textures": {
+    "bark": "twilightforest:block/canopy_log",
+    "rings": "twilightforest:block/canopy_log_top"
+  }
+}

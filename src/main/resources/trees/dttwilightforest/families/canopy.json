@@ -1,0 +1,7 @@
+{
+  "common_leaves": "dttwilightforest:canopy",
+  "common_species": "dttwilightforest:canopy",
+  "primitive_log": "twilightforest:canopy_log",
+  "primitive_stripped_log": "twilightforest:stripped_canopy_log",
+  "max_branch_radius": 8
+}

@@ -1,0 +1,7 @@
+{
+  "loader": "dynamictrees:branch",
+  "textures": {
+    "bark": "twilightforest:block/transformation_log",
+    "rings": "twilightforest:block/transformation_log_top"
+  }
+}

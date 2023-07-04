@@ -1,0 +1,7 @@
+{
+  "loader": "dynamictrees:branch",
+  "textures": {
+    "bark": "twilightforest:block/stripped_time_log",
+    "rings": "twilightforest:block/stripped_time_log_top"
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "common_leaves": "dttwilightforest:twilight_oak",
+  "common_species": "dttwilightforest:twilight_oak",
+  "primitive_log": "twilightforest:twilight_oak_log",
+  "primitive_stripped_log": "twilightforest:stripped_twilight_oak_log",
+  "max_branch_radius": 24,
+  "generate_surface_root": true,
+  "max_signal_depth": 64
+}
