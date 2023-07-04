@@ -1,0 +1,10 @@
+[
+  {
+    "select": {"types_or": [ "swamp", "jungle" ] },
+    "cancellers": {
+      "types": [ "dthexerei:tree" ],
+      "namespaces": ["hexerei"]
+    }
+  }
+
+]

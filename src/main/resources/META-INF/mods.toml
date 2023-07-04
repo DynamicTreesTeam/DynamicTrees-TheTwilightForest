@@ -1,0 +1,53 @@
+modLoader="javafml"
+loaderVersion="[40,41)"
+license="MIT"
+issueTrackerURL="https://github.com/DynamicTreesTeam/DynamicTrees-TheTwilightForest/issues"
+
+[[mods]]
+modId="dttwilightforest"
+version="${file.jarVersion}"
+displayName="Dynamic Trees for The Twilight Forest"
+
+updateJSONURL="https://github.com/DynamicTreesTeam/DynamicTreesVersionInfo/blob/master/Add-ons/TheTwilightForest.json?raw=true"
+displayURL="https://www.curseforge.com/minecraft/mc-mods/dynamic-trees-the-twilight-forest"
+
+authors="Max Hyper" #optional
+description='''
+Compatibility Mod between Dynamic trees and The Twilight Forest
+'''
+
+[[dependencies.dttwilightforest]]
+    modId="forge"
+    mandatory=true
+    versionRange="[40,41)"
+    ordering="NONE"
+    side="BOTH"
+
+[[dependencies.dttwilightforest]]
+    modId="minecraft"
+    mandatory=true
+    versionRange="[1.18.2,1.19)"
+    ordering="NONE"
+    side="BOTH"
+
+[[dependencies.dttwilightforest]]
+    modId="dynamictrees"
+    mandatory=true
+    versionRange="[1.0.3,)"
+    ordering="AFTER"
+    side="BOTH"
+
+[[dependencies.dttwilightforest]]
+    modId="dynamictreesplus"
+    mandatory=false
+    versionRange="[1.0.1,)"
+    ordering="AFTER"
+    side="BOTH"
+
+[[dependencies.dttwilightforest]]
+    modId="twilightforest"
+    mandatory=true
+    versionRange="[4.1.0,4.2.0)"
+    ordering="AFTER"
+    side="BOTH"
+
