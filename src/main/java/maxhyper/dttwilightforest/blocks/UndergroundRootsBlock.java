@@ -13,6 +13,7 @@ public class UndergroundRootsBlock extends BasicRootsBlock {
 
     public UndergroundRootsBlock(ResourceLocation name) {
         super(name);
+        registerDefaultState(defaultBlockState().setValue(LIVE, false));
     }
 
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {

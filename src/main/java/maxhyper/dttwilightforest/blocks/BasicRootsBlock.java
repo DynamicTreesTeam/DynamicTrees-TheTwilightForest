@@ -10,10 +10,12 @@ import com.ferreusveritas.dynamictrees.block.leaves.LeavesProperties;
 import com.ferreusveritas.dynamictrees.systems.GrowSignal;
 import com.ferreusveritas.dynamictrees.tree.family.Family;
 import com.ferreusveritas.dynamictrees.tree.species.Species;
+import com.ferreusveritas.dynamictrees.util.Connections;
 import com.ferreusveritas.dynamictrees.util.CoordUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -51,6 +53,7 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import net.minecraftforge.network.ConnectionData;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -85,7 +88,7 @@ public class BasicRootsBlock extends BranchBlock implements SimpleWaterloggedBlo
     }
 
     public BasicRootsBlock(ResourceLocation name) {
-        super(name, Material.WOOD);
+        super(name, Properties.of(Material.WOOD).randomTicks());
         setCanBeStripped(false);
     }
 
@@ -104,6 +107,28 @@ public class BasicRootsBlock extends BranchBlock implements SimpleWaterloggedBlo
     }
     protected boolean isSolid (GroundLogged loggingState){
         return loggingState != GroundLogged.EXPOSED && loggingState != GroundLogged.WATER;
+    }
+
+    public float rotChance(int radius, boolean waterlogged) {
+        if (radius == 0) {
+            return 0;
+        }
+        return 0.3f + ((1f / (radius * (waterlogged ? 3f : 1f) )));// Thicker branches take longer to postRot
+    }
+
+    @Override
+    public void randomTick(BlockState pState, ServerLevel pLevel, BlockPos pPos, Random pRandom) {
+        if (!isSolid(pState) && pLevel.getRandom().nextFloat() < rotChance(getRadius(pState), isWaterlogged(pState))){
+            Connections connections = getConnectionData(pLevel, pPos, pState);
+            int numConnections = 0;
+            for (int i : connections.getAllRadii()) {
+                numConnections += (i != 0) ? 1 : 0;
+            }
+            if (numConnections <= 1){
+                pLevel.setBlock(pPos, pState.getValue(GROUND_LOGGED).getBlock().defaultBlockState(), 2);
+            }
+        }
+        super.randomTick(pState, pLevel, pPos, pRandom);
     }
 
     @Override
