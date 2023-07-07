@@ -1,0 +1,16 @@
+{
+  "multipart": [
+    {
+      "when": { "ground_logged": "exposed|water" },
+      "apply": { "model": "dttwilightforest:block/mangrove_roots" }
+    },
+    {
+      "when": { "ground_logged": "dirt" },
+      "apply": { "model": "block/dirt" }
+    },
+    {
+      "when": { "ground_logged": "grass" },
+      "apply": { "model": "block/grass_block" }
+    }
+  ]
+}

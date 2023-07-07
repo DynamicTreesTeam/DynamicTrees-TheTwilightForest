@@ -2,6 +2,7 @@
   "family": "dttwilightforest:mining",
   "signal_energy": 16.0,
   "lowest_branch_height": 8,
+  "growth_logic_kit": "dttwilightforest:mining",
   "leaves_properties": "dttwilightforest:mining",
   "environment_factors" : {
 

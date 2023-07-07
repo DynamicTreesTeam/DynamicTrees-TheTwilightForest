@@ -1,0 +1,20 @@
+{
+  "multipart": [
+    {
+      "when": { "ground_logged": "exposed|water", "live": false },
+      "apply": { "model": "dttwilightforest:block/underground_roots" }
+    },
+    {
+      "when": { "ground_logged": "exposed|water", "live": true },
+      "apply": { "model": "dttwilightforest:block/live_underground_roots" }
+    },
+    {
+      "when": { "ground_logged": "dirt" },
+      "apply": { "model": "block/dirt" }
+    },
+    {
+      "when": { "ground_logged": "grass" },
+      "apply": { "model": "block/grass_block" }
+    }
+  ]
+}

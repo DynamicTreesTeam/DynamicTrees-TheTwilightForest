@@ -4,5 +4,6 @@
   "primitive_log": "twilightforest:dark_log",
   "primitive_stripped_log": "twilightforest:stripped_dark_log",
   "max_branch_radius": 24,
-  "generate_surface_root": true
+  "generate_surface_root": true,
+  "leaves_bounds_radius": 5
 }

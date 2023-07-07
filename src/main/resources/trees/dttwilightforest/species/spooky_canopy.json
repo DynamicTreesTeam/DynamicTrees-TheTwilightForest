@@ -4,20 +4,20 @@
   "signal_energy": 30.0,
   "up_probability": 8,
   "lowest_branch_height": 16,
-  "soil_longevity": 12,
+  "growth_rate": 0,
   "growth_logic_kit": "dttwilightforest:canopy",
-  "leaves_properties": "dttwilightforest:canopy",
+  "leaves_properties": "bare",
   "environment_factors" : {
 
   },
   "perfect_biomes": { "types": [ "forest" ] },
-  "primitive_sapling": "twilightforest:canopy_sapling",
   "features" : [
     {
-      "name": "dttwilightforest:underground_roots",
+      "name": "rot_soil",
       "properties": {
-        "roots": "dttwilightforest:underground_roots"
+        "rotten_soil": "podzol"
       }
-    }
+    },
+    "mushroom_rot"
   ]
 }

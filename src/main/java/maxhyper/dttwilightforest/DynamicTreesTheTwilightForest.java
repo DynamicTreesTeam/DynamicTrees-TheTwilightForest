@@ -6,6 +6,8 @@ import com.ferreusveritas.dynamictrees.block.leaves.LeavesProperties;
 import com.ferreusveritas.dynamictrees.block.rooty.SoilProperties;
 import com.ferreusveritas.dynamictrees.tree.family.Family;
 import com.ferreusveritas.dynamictrees.tree.species.Species;
+import maxhyper.dttwilightforest.init.DTTFClient;
+import maxhyper.dttwilightforest.init.DTTFRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.common.Mod;
@@ -31,9 +33,12 @@ public class DynamicTreesTheTwilightForest {
 //        }
 
         RegistryHandler.setup(MOD_ID);
+
+        DTTFRegistries.setup();
     }
 
     private void clientSetup(final FMLClientSetupEvent event) {
+        DTTFClient.setup();
     }
 
     private void commonSetup(final FMLCommonSetupEvent event) {

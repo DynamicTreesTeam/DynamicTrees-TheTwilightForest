@@ -1,8 +1,8 @@
 {
   "family": "dttwilightforest:mangrove",
   "tapering": 0.2,
-  "signal_energy": 10.0,
-  "lowest_branch_height": 4,
+  "signal_energy": 20.0,
+  "lowest_branch_height": 10,
   "growth_rate": 0.6,
   "leaves_properties": "dttwilightforest:mangrove",
   "environment_factors" : {
