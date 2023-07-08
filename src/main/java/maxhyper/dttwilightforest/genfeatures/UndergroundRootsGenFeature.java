@@ -96,7 +96,7 @@ public class UndergroundRootsGenFeature extends GenFeature {
             }
             BlockPos offPos = blockPos.offset(dir.getNormal());
             if(world.isLoaded(offPos)) {
-                if (isAnyRootBlock(world.getBlockState(offPos))){
+                if (TreeHelper.isBranch(world.getBlockState(offPos))){
                     return false;
                 }
             } else {
@@ -235,6 +235,7 @@ public class UndergroundRootsGenFeature extends GenFeature {
 
     @Override
     protected boolean postGrow(GenFeatureConfiguration configuration, PostGrowContext context) {
+        if (context.fertility() <= 0) return false;
         Random rand = new Random();
         Level level = context.levelContext().level();
         BlockPos blockPos = context.pos();

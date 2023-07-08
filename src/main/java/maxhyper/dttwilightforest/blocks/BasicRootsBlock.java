@@ -5,13 +5,23 @@ import com.ferreusveritas.dynamictrees.api.TreeHelper;
 import com.ferreusveritas.dynamictrees.api.cell.Cell;
 import com.ferreusveritas.dynamictrees.api.cell.CellNull;
 import com.ferreusveritas.dynamictrees.api.network.MapSignal;
+import com.ferreusveritas.dynamictrees.api.treedata.TreePart;
 import com.ferreusveritas.dynamictrees.block.branch.BranchBlock;
 import com.ferreusveritas.dynamictrees.block.leaves.LeavesProperties;
+import com.ferreusveritas.dynamictrees.block.rooty.RootyBlock;
+import com.ferreusveritas.dynamictrees.entity.FallingTreeEntity;
 import com.ferreusveritas.dynamictrees.systems.GrowSignal;
+import com.ferreusveritas.dynamictrees.systems.nodemapper.DestroyerNode;
+import com.ferreusveritas.dynamictrees.systems.nodemapper.NetVolumeNode;
+import com.ferreusveritas.dynamictrees.systems.nodemapper.SpeciesNode;
+import com.ferreusveritas.dynamictrees.systems.nodemapper.StateNode;
 import com.ferreusveritas.dynamictrees.tree.family.Family;
 import com.ferreusveritas.dynamictrees.tree.species.Species;
+import com.ferreusveritas.dynamictrees.util.BranchDestructionData;
 import com.ferreusveritas.dynamictrees.util.Connections;
 import com.ferreusveritas.dynamictrees.util.CoordUtils;
+import maxhyper.dttwilightforest.nodes.RootsDestroyerNode;
+import maxhyper.dttwilightforest.nodes.SolidRootsNode;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
@@ -19,18 +29,16 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
-import net.minecraft.tags.BlockTags;
-import net.minecraft.util.Mth;
 import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.monster.piglin.PiglinAi;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
@@ -50,15 +58,17 @@ import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.level.material.Material;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.minecraftforge.network.ConnectionData;
+import net.minecraftforge.common.ForgeMod;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import javax.annotation.Nonnull;
-import java.util.Random;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class BasicRootsBlock extends BranchBlock implements SimpleWaterloggedBlock {
 
@@ -96,17 +106,20 @@ public class BasicRootsBlock extends BranchBlock implements SimpleWaterloggedBlo
         builder.add(RADIUS, GROUND_LOGGED);
     }
 
-    protected boolean isWaterlogged (BlockState state){
+    public boolean isWaterlogged (BlockState state){
         return GroundLogged.WATER.equals(state.getValue(GROUND_LOGGED));
     }
-    protected boolean isExposed (BlockState state){
+    public boolean isExposed (BlockState state){
         return GroundLogged.EXPOSED.equals(state.getValue(GROUND_LOGGED));
     }
-    protected boolean isSolid (BlockState state){
+    public boolean isSolid (BlockState state){
         return isSolid(state.getValue(GROUND_LOGGED));
     }
     protected boolean isSolid (GroundLogged loggingState){
         return loggingState != GroundLogged.EXPOSED && loggingState != GroundLogged.WATER;
+    }
+    public Block getLoggedBlock (BlockState rootState){
+        return rootState.getValue(GROUND_LOGGED).getBlock();
     }
 
     public float rotChance(int radius, boolean waterlogged) {
@@ -181,11 +194,49 @@ public class BasicRootsBlock extends BranchBlock implements SimpleWaterloggedBlo
 
     @Override
     public boolean shouldAnalyse(BlockState state, BlockGetter level, BlockPos pos) {
+        //return !isSolid(state);
         return true;
+    }
+
+    protected int getMaxSignalDepth() {
+        return 32;
     }
 
     @Override
     public MapSignal analyse(BlockState state, LevelAccessor level, BlockPos pos, @Nullable Direction fromDir, MapSignal signal) {
+        if (signal.overflow || (signal.trackVisited && signal.doTrackingVisited(pos))) {
+            return signal;
+        }
+
+        if (signal.depth++ < getMaxSignalDepth()) {// Prevents going too deep into large networks, or worse, being caught in a network loop
+            signal.run(state, level, pos, fromDir);// Run the inspectors of choice
+            for (Direction dir : Direction.values()) {// Spread signal in various directions
+                if (dir != fromDir) {// don't count where the signal originated from
+                    BlockPos deltaPos = pos.relative(dir);
+
+                    BlockState deltaState = level.getBlockState(deltaPos);
+                    TreePart treePart = TreeHelper.getTreePart(deltaState);
+
+                    if (treePart.shouldAnalyse(deltaState, level, deltaPos)) {
+                        signal = treePart.analyse(deltaState, level, deltaPos, dir.getOpposite(), signal);
+
+                        // This should only be true for the originating block when the root node is found
+                        if (signal.foundRoot && signal.localRootDir == null && fromDir == null) {
+                            signal.localRootDir = dir;
+                        }
+                    }
+                }
+            }
+            signal.returnRun(state, level, pos, fromDir);
+        } else {
+            BlockState state2 = level.getBlockState(pos);
+            if (signal.destroyLoopedNodes && state2.getBlock() instanceof BranchBlock branch) {
+                branch.breakDeliberate(level, pos, DynamicTrees.DestroyMode.OVERFLOW);// Destroy one of the offending nodes
+            }
+            signal.overflow = true;
+        }
+        signal.depth--;
+
         return signal;
     }
 
@@ -271,7 +322,7 @@ public class BasicRootsBlock extends BranchBlock implements SimpleWaterloggedBlo
     }
 
     ///////////////////////////////////////////
-    // BRANCH OVERRIDES
+    // BRANCH DESTRUCTION
     ///////////////////////////////////////////
 
     @Override
@@ -284,25 +335,87 @@ public class BasicRootsBlock extends BranchBlock implements SimpleWaterloggedBlo
             if (!player.isCreative()) dropResources(logged.getBlock().defaultBlockState(), level, pos);
             return false;
         }
-
-        playerWillDestroy(level, pos, state, player);
-        return level.setBlock(pos, fluid.createLegacyBlock(), level.isClientSide ? 11 : 3);
+        return super.onDestroyedByPlayer(state, level, pos, player, willHarvest, fluid);
+//        playerWillDestroy(level, pos, state, player);
+//        return level.setBlock(pos, fluid.createLegacyBlock(), level.isClientSide ? 11 : 3);
     }
+
+//    @Override
+//    public void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean flag) {
+//        if (state.hasBlockEntity() && (!state.is(newState.getBlock()) || !newState.hasBlockEntity())) {
+//            level.removeBlockEntity(pos);
+//        }
+//    }
+
+//    public void playerWillDestroy(Level pLevel, BlockPos pPos, BlockState pState, Player pPlayer) {
+//        this.spawnDestroyParticles(pLevel, pPlayer, pPos, pState);
+//        if (pState.is(BlockTags.GUARDED_BY_PIGLINS)) {
+//            PiglinAi.angerNearbyPiglins(pPlayer, false);
+//        }
+//
+//        pLevel.gameEvent(pPlayer, GameEvent.BLOCK_DESTROY, pPos);
+//    }
 
     @Override
-    public void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean flag) {
-        if (state.hasBlockEntity() && (!state.is(newState.getBlock()) || !newState.hasBlockEntity())) {
-            level.removeBlockEntity(pos);
-        }
+    public void futureBreak(BlockState state, Level level, BlockPos cutPos, LivingEntity entity) {
+        // Tries to get the face being pounded on.
+        final double reachDistance = entity instanceof Player ? Objects.requireNonNull(entity.getAttribute(ForgeMod.REACH_DISTANCE.get())).getValue() : 5.0D;
+        final BlockHitResult ragTraceResult = this.playerRayTrace(entity, reachDistance, 1.0F);
+        final Direction toolDir = ragTraceResult != null ? (entity.isShiftKeyDown() ? ragTraceResult.getDirection().getOpposite() : ragTraceResult.getDirection()) : Direction.DOWN;
+
+        // Play and render block break sound and particles (must be done before block is broken).
+        level.levelEvent(null, 2001, cutPos, getId(state));
+
+        // Do the actual destruction.
+        final BranchDestructionData destroyData = this.destroyBranchFromNode(level, cutPos, toolDir, false, entity);
+
+        // Get all of the wood drops.
+        final ItemStack heldItem = entity.getMainHandItem();
+        final int fortune = EnchantmentHelper.getItemEnchantmentLevel(Enchantments.BLOCK_FORTUNE, heldItem);
+        final float fortuneFactor = 1.0f + 0.25f * fortune;
+        final NetVolumeNode.Volume woodVolume = destroyData.woodVolume; // The amount of wood calculated from the body of the tree network.
+        woodVolume.multiplyVolume(fortuneFactor);
+        final List<ItemStack> woodItems = destroyData.species.getBranchesDrops(level, woodVolume, heldItem);
+
+        // Drop the FallingTreeEntity into the level.
+        FallingTreeEntity.dropTree(level, destroyData, woodItems, FallingTreeEntity.DestroyType.HARVEST);
+
+        // Damage the axe by a prescribed amount.
+        this.damageAxe(entity, heldItem, this.getRadius(state), woodVolume, true);
     }
 
-    public void playerWillDestroy(Level pLevel, BlockPos pPos, BlockState pState, Player pPlayer) {
-        this.spawnDestroyParticles(pLevel, pPlayer, pPos, pState);
-        if (pState.is(BlockTags.GUARDED_BY_PIGLINS)) {
-            PiglinAi.angerNearbyPiglins(pPlayer, false);
+    public BranchDestructionData destroyBranchFromNode(Level level, BlockPos cutPos, Direction toolDir, boolean wholeTree, @javax.annotation.Nullable final LivingEntity entity) {
+        final BlockState blockState = level.getBlockState(cutPos);
+        final SolidRootsNode solidRootsNode = new SolidRootsNode();
+        final MapSignal signal = analyse(blockState, level, cutPos, null, new MapSignal(solidRootsNode)); // Analyze entire tree network to find root node and species.
+//        BlockState rootyState = level.getBlockState(signal.root);
+//        RootyBlock rooty = TreeHelper.getRooty(rootyState);
+//        final Species species = rooty != null ? rooty.getSpecies(rootyState, level, signal.root) : Species.NULL_SPECIES;
+
+        // Analyze only part of the tree beyond the break point and map out the extended block states.
+        // We can't destroy the branches during this step since we need accurate extended block states that include connections.
+        StateNode stateMapper = new StateNode(cutPos);
+        this.analyse(blockState, level, cutPos, wholeTree ? null : signal.localRootDir, new MapSignal(stateMapper));
+
+        // Analyze only part of the tree beyond the break point and calculate it's volume, then destroy the branches.
+        final NetVolumeNode volumeSum = new NetVolumeNode();
+        final RootsDestroyerNode destroyer = new RootsDestroyerNode();
+        destroyMode = DynamicTrees.DestroyMode.HARVEST;
+        this.analyse(blockState, level, cutPos, wholeTree ? null : signal.localRootDir, new MapSignal(volumeSum, destroyer));
+        destroyMode = DynamicTrees.DestroyMode.SLOPPY;
+
+        // Calculate main trunk height.
+        int trunkHeight = 1;
+        for (BlockPos iter = new BlockPos(0, 1, 0); stateMapper.getBranchConnectionMap().containsKey(iter); iter = iter.above()) {
+            trunkHeight++;
         }
 
-        pLevel.gameEvent(pPlayer, GameEvent.BLOCK_DESTROY, pPos);
+        Direction cutDir = signal.localRootDir;
+        if (cutDir == null) {
+            cutDir = Direction.DOWN;
+        }
+
+        return new BranchDestructionData(Species.NULL_SPECIES, stateMapper.getBranchConnectionMap(), new HashMap<>(), new ArrayList<>(), destroyer.getEnds(), volumeSum.getVolume(), cutPos, cutDir, toolDir, trunkHeight);
     }
 
     protected boolean canPlace(Player player, Level level, BlockPos clickedPos, BlockState pState) {
@@ -372,4 +485,11 @@ public class BasicRootsBlock extends BranchBlock implements SimpleWaterloggedBlo
         return blockState == null ? 0 : TreeHelper.getTreePart(blockState).getRadiusForConnection(blockState, level, deltaPos, this, side, radius);
     }
 
+    @Override
+    public ItemStack getCloneItemStack(BlockState state, HitResult target, BlockGetter level, BlockPos pos, Player player) {
+        if (isSolid(state)){
+            return new ItemStack(getLoggedBlock(state));
+        }
+        return new ItemStack(asItem());
+    }
 }

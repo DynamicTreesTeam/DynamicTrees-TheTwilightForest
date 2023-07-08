@@ -1,0 +1,7 @@
+{
+  "parent": "dttwilightforest:item/root_branch",
+  "textures": {
+    "bark": "twilightforest:block/mangrove_root",
+    "rings": "twilightforest:block/mangrove_log_top"
+  }
+}

@@ -1,4 +1,6 @@
 {
+  "type": "dttwilightforest:mangrove",
+  "root_soil": "dttwilightforest:mangrove_roots",
   "family": "dttwilightforest:mangrove",
   "tapering": 0.3,
   "signal_energy": 16.0,

@@ -14,7 +14,7 @@
     },
     {
       "when": { "ground_logged": "grass" },
-      "apply": { "model": "block/grass_block" }
+      "apply": { "model": "dttwilightforest:block/grass_block" }
     }
   ]
 }

@@ -23,7 +23,10 @@ public class DTTFClient {
 
         final BlockColors blockColors = Minecraft.getInstance().getBlockColors();
 
-        blockColors.register((state, level, pos, tintIndex) -> level != null && pos != null ? BiomeColors.getAverageGrassColor(level, pos) : GrassColor.get(0.5D, 1.0D),
+        blockColors.register((state, level, pos, tintIndex) -> {
+                    if (tintIndex != 1) return 0xFFFFFF;
+                    return level != null && pos != null ? BiomeColors.getAverageGrassColor(level, pos) : GrassColor.get(0.5D, 1.0D);
+                },
                 DTTFRegistries.MANGROVE_ROOTS.get(),
                 DTTFRegistries.UNDERGROUND_ROOTS.get());
 
