@@ -6,13 +6,14 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
+import net.minecraft.world.level.material.Material;
 
 public class UndergroundRootsBlock extends BasicRootsBlock {
 
     public static final BooleanProperty LIVE = BooleanProperty.create("live");
 
     public UndergroundRootsBlock(ResourceLocation name) {
-        super(name);
+        super(name, Properties.of(Material.WOOD).randomTicks());
         registerDefaultState(defaultBlockState().setValue(LIVE, false));
     }
 

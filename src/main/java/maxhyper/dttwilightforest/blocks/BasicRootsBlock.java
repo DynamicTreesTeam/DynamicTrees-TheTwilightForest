@@ -11,15 +11,15 @@ import com.ferreusveritas.dynamictrees.block.leaves.LeavesProperties;
 import com.ferreusveritas.dynamictrees.block.rooty.RootyBlock;
 import com.ferreusveritas.dynamictrees.entity.FallingTreeEntity;
 import com.ferreusveritas.dynamictrees.systems.GrowSignal;
-import com.ferreusveritas.dynamictrees.systems.nodemapper.DestroyerNode;
 import com.ferreusveritas.dynamictrees.systems.nodemapper.NetVolumeNode;
-import com.ferreusveritas.dynamictrees.systems.nodemapper.SpeciesNode;
 import com.ferreusveritas.dynamictrees.systems.nodemapper.StateNode;
 import com.ferreusveritas.dynamictrees.tree.family.Family;
 import com.ferreusveritas.dynamictrees.tree.species.Species;
 import com.ferreusveritas.dynamictrees.util.BranchDestructionData;
 import com.ferreusveritas.dynamictrees.util.Connections;
 import com.ferreusveritas.dynamictrees.util.CoordUtils;
+import com.ferreusveritas.dynamictrees.util.ResourceLocationUtils;
+import maxhyper.dttwilightforest.DynamicTreesTheTwilightForest;
 import maxhyper.dttwilightforest.nodes.RootsDestroyerNode;
 import maxhyper.dttwilightforest.nodes.SolidRootsNode;
 import net.minecraft.core.BlockPos;
@@ -47,6 +47,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.SimpleWaterloggedBlock;
 import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
@@ -68,7 +69,6 @@ import org.jetbrains.annotations.Nullable;
 
 import javax.annotation.Nonnull;
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class BasicRootsBlock extends BranchBlock implements SimpleWaterloggedBlock {
 
@@ -97,8 +97,8 @@ public class BasicRootsBlock extends BranchBlock implements SimpleWaterloggedBlo
         }
     }
 
-    public BasicRootsBlock(ResourceLocation name) {
-        super(name, Properties.of(Material.WOOD).randomTicks());
+    public BasicRootsBlock(ResourceLocation name, BlockBehaviour.Properties properties) {
+        super(ResourceLocationUtils.suffix(name, NAME_SUFFIX), properties);
         setCanBeStripped(false);
     }
 
@@ -194,12 +194,12 @@ public class BasicRootsBlock extends BranchBlock implements SimpleWaterloggedBlo
 
     @Override
     public boolean shouldAnalyse(BlockState state, BlockGetter level, BlockPos pos) {
-        //return !isSolid(state);
-        return true;
+        return !isSolid(state);
+        //return true;
     }
 
     protected int getMaxSignalDepth() {
-        return 32;
+        return 64;
     }
 
     @Override
@@ -242,7 +242,12 @@ public class BasicRootsBlock extends BranchBlock implements SimpleWaterloggedBlo
 
     @Override
     public Family getFamily(BlockState state, BlockGetter level, BlockPos pos) {
-        return Family.NULL_FAMILY;
+        Family family = super.getFamily(state, level, pos);
+        if (!family.isValid()){
+            //cheap way to fix drops issues
+            return Family.REGISTRY.get(DynamicTreesTheTwilightForest.location("mangrove"));
+        }
+        return family;
     }
 
     @Override
@@ -388,9 +393,13 @@ public class BasicRootsBlock extends BranchBlock implements SimpleWaterloggedBlo
         final BlockState blockState = level.getBlockState(cutPos);
         final SolidRootsNode solidRootsNode = new SolidRootsNode();
         final MapSignal signal = analyse(blockState, level, cutPos, null, new MapSignal(solidRootsNode)); // Analyze entire tree network to find root node and species.
-//        BlockState rootyState = level.getBlockState(signal.root);
-//        RootyBlock rooty = TreeHelper.getRooty(rootyState);
-//        final Species species = rooty != null ? rooty.getSpecies(rootyState, level, signal.root) : Species.NULL_SPECIES;
+        BlockState rootyState = null;
+        RootyBlock rooty = null;
+        if (signal.root != null){
+            rootyState = level.getBlockState(signal.root);
+            rooty = TreeHelper.getRooty(rootyState);
+        }
+        final Species species = rooty != null ? rooty.getSpecies(rootyState, level, signal.root) : Species.REGISTRY.get(DynamicTreesTheTwilightForest.location("mangrove"));
 
         // Analyze only part of the tree beyond the break point and map out the extended block states.
         // We can't destroy the branches during this step since we need accurate extended block states that include connections.
@@ -415,7 +424,7 @@ public class BasicRootsBlock extends BranchBlock implements SimpleWaterloggedBlo
             cutDir = Direction.DOWN;
         }
 
-        return new BranchDestructionData(Species.NULL_SPECIES, stateMapper.getBranchConnectionMap(), new HashMap<>(), new ArrayList<>(), destroyer.getEnds(), volumeSum.getVolume(), cutPos, cutDir, toolDir, trunkHeight);
+        return new BranchDestructionData(species, stateMapper.getBranchConnectionMap(), new HashMap<>(), new ArrayList<>(), destroyer.getEnds(), volumeSum.getVolume(), cutPos, cutDir, toolDir, trunkHeight);
     }
 
     protected boolean canPlace(Player player, Level level, BlockPos clickedPos, BlockState pState) {

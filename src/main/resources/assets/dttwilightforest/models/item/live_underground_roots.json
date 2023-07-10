@@ -1,0 +1,7 @@
+{
+  "parent": "dttwilightforest:item/root_branch",
+  "textures": {
+    "bark": "twilightforest:block/liveroot_block",
+    "rings": "twilightforest:block/root"
+  }
+}

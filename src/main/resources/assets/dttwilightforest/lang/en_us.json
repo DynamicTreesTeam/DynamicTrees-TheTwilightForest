@@ -1,10 +1,36 @@
 {
-  "block.dthexerei.mahogany_branch":"Mahogany Tree",
-  "block.dthexerei.willow_branch":"Willow Tree",
+  "block.dttwilightforest.twilight_oak_branch":"Twilight Oak Tree",
+  "block.dttwilightforest.canopy_branch":"Canopy Tree",
+  "block.dttwilightforest.darkwood_branch":"Darkwood Tree",
+  "block.dttwilightforest.mangrove_branch":"Twilight Mangrove Tree",
+  "block.dttwilightforest.mining_branch":"Miner's Tree",
+  "block.dttwilightforest.sorting_branch":"Sorting Tree",
+  "block.dttwilightforest.time_branch":"Tree of Time",
+  "block.dttwilightforest.transformation_branch":"Tree of Transformation",
 
-  "species.dthexerei.mahogany":"Mahogany",
-  "species.dthexerei.willow":"Willow",
+  "block.dttwilightforest.mangrove_roots":"Twilight Mangrove Roots",
+  "block.dttwilightforest.underground_roots":"Roots",
+  "block.dttwilightforest.live_underground_roots":"Liveroots",
 
-  "item.dthexerei.mahogany_seed":"Mahogany Pod",
-  "item.dthexerei.willow_seed":"Willow Catkin"
+  "species.dttwilightforest.twilight_oak":"Sickly Twilight Oak",
+  "species.dttwilightforest.robust_twilight_oak":"Robust Twilight Oak",
+  "species.dttwilightforest.rainbow_oak":"Rainbow Oak",
+  "species.dttwilightforest.canopy":"Canopy Tree",
+  "species.dttwilightforest.darkwood":"Darkwood",
+  "species.dttwilightforest.mangrove":"Twilight Mangrove",
+  "species.dttwilightforest.mining":"Mining",
+  "species.dttwilightforest.sorting":"Sorting",
+  "species.dttwilightforest.time":"Time",
+  "species.dttwilightforest.transformation":"Transformation",
+
+  "item.dttwilightforest.twilight_oak_seed":"Sickly Twilight Oak Acorn",
+  "item.dttwilightforest.robust_oak_seed":"Sickly Twilight Oak Acorn",
+  "item.dttwilightforest.rainbow_oak_seed":"Rainbow Oak Acorn",
+  "item.dttwilightforest.canopy_seed":"Canopy Tree Seed",
+  "item.dttwilightforest.darkwood_seed":"Darkwood Seed",
+  "item.dttwilightforest.mangrove_seed":"Twilight Mangrove Propagule",
+  "item.dttwilightforest.mining_seed":"Miner's Seed",
+  "item.dttwilightforest.sorting_seed":"Sorting Seed",
+  "item.dttwilightforest.time_seed":"Seed of Time",
+  "item.dttwilightforest.transformation_seed":"Seed of Transformation"
 }

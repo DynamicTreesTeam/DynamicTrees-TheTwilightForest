@@ -1,6 +1,5 @@
 package maxhyper.dttwilightforest.init;
 
-import com.ferreusveritas.dynamictrees.DynamicTrees;
 import com.ferreusveritas.dynamictrees.api.cell.CellKit;
 import com.ferreusveritas.dynamictrees.api.registry.RegistryEvent;
 import com.ferreusveritas.dynamictrees.api.registry.RegistryHandler;
@@ -9,10 +8,8 @@ import com.ferreusveritas.dynamictrees.api.worldgen.FeatureCanceller;
 import com.ferreusveritas.dynamictrees.block.rooty.SoilProperties;
 import com.ferreusveritas.dynamictrees.growthlogic.GrowthLogicKit;
 import com.ferreusveritas.dynamictrees.systems.genfeature.GenFeature;
-import com.ferreusveritas.dynamictrees.tree.species.NetherFungusSpecies;
-import com.ferreusveritas.dynamictrees.tree.species.PalmSpecies;
+import com.ferreusveritas.dynamictrees.tree.family.Family;
 import com.ferreusveritas.dynamictrees.tree.species.Species;
-import com.ferreusveritas.dynamictrees.tree.species.SwampOakSpecies;
 import com.google.common.base.Suppliers;
 import maxhyper.dttwilightforest.DynamicTreesTheTwilightForest;
 import maxhyper.dttwilightforest.blocks.BasicRootsBlock;
@@ -22,11 +19,14 @@ import maxhyper.dttwilightforest.canceller.DTTFTreeFeatureCanceller;
 import maxhyper.dttwilightforest.cellkits.DTTFCellKits;
 import maxhyper.dttwilightforest.genfeatures.DTTFGenFeatures;
 import maxhyper.dttwilightforest.growthlogic.DTTFGrowthLogicKits;
+import maxhyper.dttwilightforest.trees.MangroveFamily;
 import maxhyper.dttwilightforest.trees.MangroveSpecies;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.levelgen.feature.configurations.TreeConfiguration;
+import net.minecraft.world.level.material.Material;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
@@ -37,15 +37,26 @@ public class DTTFRegistries {
 
     public static final ResourceLocation MANGROVE_RESLOC = DynamicTreesTheTwilightForest.location("mangrove_roots");
     public static final ResourceLocation UNDERGROUND_RESLOC = DynamicTreesTheTwilightForest.location("underground_roots");
+    public static final ResourceLocation LIVE_UNDERGROUND_RESLOC = DynamicTreesTheTwilightForest.location("live_underground_roots");
 
-    public static final Supplier<BasicRootsBlock> MANGROVE_ROOTS = Suppliers.memoize(()->new BasicRootsBlock(MANGROVE_RESLOC));
-    public static final Supplier<BasicRootsBlock> UNDERGROUND_ROOTS = Suppliers.memoize(()->new UndergroundRootsBlock(UNDERGROUND_RESLOC));
+    public static final Supplier<BasicRootsBlock> MANGROVE_ROOTS = Suppliers.memoize(()->new BasicRootsBlock(MANGROVE_RESLOC, BlockBehaviour.Properties.of(Material.WOOD).randomTicks()));
+    public static final Supplier<BasicRootsBlock> UNDERGROUND_ROOTS = Suppliers.memoize(()->new BasicRootsBlock(UNDERGROUND_RESLOC, BlockBehaviour.Properties.of(Material.WOOD).randomTicks()));
+    public static final Supplier<BasicRootsBlock> LIVE_UNDERGROUND_ROOTS = Suppliers.memoize(()->new BasicRootsBlock(LIVE_UNDERGROUND_RESLOC, BlockBehaviour.Properties.of(Material.WOOD).randomTicks()));
 
     public static void setup() {
         RegistryHandler.addBlock(MANGROVE_RESLOC, MANGROVE_ROOTS);
         RegistryHandler.addItem(MANGROVE_RESLOC, ()-> new BlockItem(MANGROVE_ROOTS.get(), new Item.Properties()));
+
         RegistryHandler.addBlock(UNDERGROUND_RESLOC, UNDERGROUND_ROOTS);
         RegistryHandler.addItem(UNDERGROUND_RESLOC, ()-> new BlockItem(UNDERGROUND_ROOTS.get(), new Item.Properties()));
+
+        RegistryHandler.addBlock(LIVE_UNDERGROUND_RESLOC, LIVE_UNDERGROUND_ROOTS);
+        RegistryHandler.addItem(LIVE_UNDERGROUND_RESLOC, ()-> new BlockItem(LIVE_UNDERGROUND_ROOTS.get(), new Item.Properties()));
+    }
+
+    @SubscribeEvent
+    public static void registerFamilyTypes(final TypeRegistryEvent<Family> event) {
+        event.registerType(DynamicTreesTheTwilightForest.location("mangrove"), MangroveFamily.TYPE);
     }
 
     @SubscribeEvent

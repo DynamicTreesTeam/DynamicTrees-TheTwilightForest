@@ -2,11 +2,13 @@ package maxhyper.dttwilightforest.genfeatures;
 
 import com.ferreusveritas.dynamictrees.api.TreeHelper;
 import com.ferreusveritas.dynamictrees.api.configuration.ConfigurationProperty;
+import com.ferreusveritas.dynamictrees.block.branch.BranchBlock;
 import com.ferreusveritas.dynamictrees.block.rooty.SoilHelper;
 import com.ferreusveritas.dynamictrees.systems.genfeature.GenFeature;
 import com.ferreusveritas.dynamictrees.systems.genfeature.GenFeatureConfiguration;
 import com.ferreusveritas.dynamictrees.systems.genfeature.context.PostGenerationContext;
 import com.ferreusveritas.dynamictrees.systems.genfeature.context.PostGrowContext;
+import com.ferreusveritas.dynamictrees.tree.species.Species;
 import maxhyper.dttwilightforest.blocks.BasicRootsBlock;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -50,6 +52,17 @@ public class UndergroundRootsGenFeature extends GenFeature {
     @Override
     protected void registerProperties() {
         this.register(ROOTS, SECONDARY_ROOTS, ROOT_BRANCH_CHANCE, GROW_CHANCE, FAIL_EXPOSED_CHANCE, MAX_RADIUS, WORLD_GEN_MAX_PULSES, MAX_DEPTH, SECONDARY_THRESHOLD);
+    }
+
+    @Override
+    public boolean shouldApply(Species species, GenFeatureConfiguration configuration) {
+        if (configuration.get(ROOTS) instanceof BranchBlock root){
+            species.getFamily().addValidBranches(root);
+        }
+        if (configuration.get(SECONDARY_ROOTS) instanceof BranchBlock root){
+            species.getFamily().addValidBranches(root);
+        }
+        return super.shouldApply(species, configuration);
     }
 
     Direction[] dirsExceptUp = {Direction.DOWN, Direction.NORTH, Direction.EAST, Direction.SOUTH, Direction.WEST};
@@ -216,19 +229,19 @@ public class UndergroundRootsGenFeature extends GenFeature {
     @Override
     protected boolean postGenerate(GenFeatureConfiguration configuration, PostGenerationContext context) {
         Random rand = new Random();
-        Level world = context.levelContext().level();
+        Level level = context.levelContext().level();
         BlockPos blockPos = context.pos();
 
-        BlockState state = world.getBlockState(blockPos.below());
-        if (!isAnyRootBlock(state)){
-            boolean placed = iterateRootGrow(world, blockPos.below(), rand, 2, Direction.UP, blockPos, 0, configuration);
+        BlockState state = level.getBlockState(blockPos.below());
+        if (!isAnyRootBlock(state) && checkAvailableAround(level,blockPos.below(), Direction.UP)){
+            boolean placed = iterateRootGrow(level, blockPos.below(), rand, 2, Direction.UP, blockPos, 0, configuration);
             if (!placed) return false;
         }
         for (int a = configuration.get(WORLD_GEN_MAX_PULSES); a>0; a--){
             //int radius = getRootRadius(state);
             float chance = configuration.get(GROW_CHANCE);
             boolean grow = chance > 0 && rand.nextFloat() < chance;
-            iterateRootGrow(world, blockPos.below(), rand, getRootRadius(state)+(grow?1:0), Direction.UP, blockPos, 0, configuration);
+            iterateRootGrow(level, blockPos.below(), rand, getRootRadius(state)+(grow?1:0), Direction.UP, blockPos, 0, configuration);
         }
         return true;
     }
@@ -241,7 +254,7 @@ public class UndergroundRootsGenFeature extends GenFeature {
         BlockPos blockPos = context.pos();
 
         BlockState downState = level.getBlockState(blockPos.below());
-        if (!isAnyRootBlock(downState)){
+        if (!isAnyRootBlock(downState) && checkAvailableAround(level,blockPos.below(), Direction.UP)){
             return iterateRootGrow(level, blockPos.below(), rand, 2, Direction.UP, blockPos, 0, configuration);
         } else {
             int radius = getRootRadius(downState);

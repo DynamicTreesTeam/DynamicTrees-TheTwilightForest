@@ -2,7 +2,7 @@
   "multipart": [
     {
       "when": { "ground_logged": "exposed|water" },
-      "apply": { "model": "dttwilightforest:block/underground_roots" }
+      "apply": { "model": "dttwilightforest:block/live_underground_roots" }
     },
     {
       "when": { "ground_logged": "dirt" },

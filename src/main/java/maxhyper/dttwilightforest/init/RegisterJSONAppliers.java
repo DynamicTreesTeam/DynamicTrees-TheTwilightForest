@@ -21,8 +21,8 @@ public final class RegisterJSONAppliers {
     }
 
     public static void registerSpeciesAppliers(PropertyAppliers<Species, JsonElement> appliers) {
-        appliers.register("root_soil", MangroveSpecies.class, SoilProperties.class,
-                        MangroveSpecies::setDefaultSoil);
+        appliers.register("root_soil", MangroveSpecies.class, SoilProperties.class, MangroveSpecies::setDefaultSoil)
+                .register("worldgen_height_offset", MangroveSpecies.class, Integer.class, MangroveSpecies::setWorldgenHeightOffset);
     }
 
     @SubscribeEvent public static void registerAppliersSpecies(final ApplierRegistryEvent.GatherData<Species, JsonElement> event) { registerSpeciesAppliers(event.getAppliers()); }

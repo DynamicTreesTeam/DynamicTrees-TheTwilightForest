@@ -7,7 +7,9 @@ import com.ferreusveritas.dynamictrees.block.rooty.SoilHelper;
 import com.ferreusveritas.dynamictrees.block.rooty.SoilProperties;
 import com.ferreusveritas.dynamictrees.tree.family.Family;
 import com.ferreusveritas.dynamictrees.tree.species.Species;
+import com.ferreusveritas.dynamictrees.worldgen.GenerationContext;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Block;
@@ -18,9 +20,14 @@ public class MangroveSpecies extends Species {
     public static final TypedRegistry.EntryType<Species> TYPE = createDefaultType(MangroveSpecies::new);
 
     private SoilProperties defaultSoil;
+    private int worldgenHeightOffset = 4;
 
     public void setDefaultSoil(SoilProperties defaultSoil) {
         this.defaultSoil = defaultSoil;
+    }
+
+    public void setWorldgenHeightOffset(int worldgenHeightOffset) {
+        this.worldgenHeightOffset = worldgenHeightOffset;
     }
 
     public MangroveSpecies(ResourceLocation name, Family family, LeavesProperties leavesProperties) {
@@ -38,6 +45,12 @@ public class MangroveSpecies extends Species {
         }
 
         return super.placeRootyDirtBlock(level, rootPos, fertility);
+    }
+
+    @Override
+    public boolean generate(GenerationContext context) {
+        context.rootPos().move(Direction.UP, worldgenHeightOffset);
+        return super.generate(context);
     }
 
 }
